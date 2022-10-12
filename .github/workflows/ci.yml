@@ -1,16 +1,15 @@
-name: ci 
+name: ci
 
 on: 
+  push: 
+    branches: [ main ] 
+  pull_request: 
+    branches: [ main ] 
+
+jobs: 
   
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-
-  test:
-    name: Test
+  test: 
+    name: Run Test
     runs-on: ubuntu-latest
 
     services:
@@ -18,7 +17,7 @@ jobs:
         image: postgres:14
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSORD: postgres
+          POSTGRES_PASSWORD: password
           POSTGRES_DB: go-ctf
         ports:
           - 5432:5432
