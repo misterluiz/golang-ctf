@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 	"testing"
 	"time"
 
@@ -105,7 +104,7 @@ func TestListAccounts(t *testing.T) {
 		require.Equal(t, lastAccount.Description, account.Description)
 		require.NotEmpty(t, lastAccount.Date)
 		require.NotEmpty(t, lastAccount.CreatedAt)
-		log.Fatal("account category title", account.CategoryTytle)
+
 	}
 
 }
