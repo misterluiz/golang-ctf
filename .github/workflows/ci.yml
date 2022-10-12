@@ -11,7 +11,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
 
     services:
       postgres:
