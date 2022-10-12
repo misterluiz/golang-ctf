@@ -1,4 +1,4 @@
-createDb: 
+createdb: 
 	createdb --username=postgres --owner=postgres go-ctf
 
 postgres:
@@ -10,4 +10,4 @@ migrationUp:
 test:
  go test -v -cover./...
 
-.PHONY: createDb postgres migrateup migrationdrop test
+.PHONY: createdb postgres migrateup migrationdrop test
