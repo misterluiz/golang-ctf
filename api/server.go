@@ -23,7 +23,7 @@ func NewServer(store *db.SQLStore) *Server {
 	return server
 }
 
-func (server *Server) Star(address string) error {
+func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
 
