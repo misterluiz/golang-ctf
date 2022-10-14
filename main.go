@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	dbDriver      = "Postgres"
+	dbDriver      = "postgres"
 	dbSource      = "postgresql://postgres:password@localhost:5432/go-ctf?sslmode=disable"
 	serverAddress = "0.0.0.0:8000"
 )
