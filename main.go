@@ -18,7 +18,7 @@ const (
 func main() {
 	conn, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("nÃO FOI POSsivel conectar", err)
+		log.Fatal("NÃO FOI POSsivel conectar", err)
 	}
 
 	store := db.NewStore(conn)
