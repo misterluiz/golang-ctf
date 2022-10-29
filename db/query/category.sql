@@ -14,8 +14,13 @@ WHERE id = $1 LIMIT 1;
 
 -- name: GetCategories :many
 SELECT * FROM categories
-WHERE user_id = $1 AND type = $2 
-AND tytle LIKE $3 AND description LIKE $4;
+WHERE user_id = $1 
+AND 
+    type = $2 
+AND 
+    LOWER(tytle) LIKE CONCAT('%' , LOWER(@tytle::text), '%') 
+AND 
+    LOWER(description) LIKE CONCAT('%' , LOWER(@description::text), '%');
 
 -- name: UpdateCategories :one
 UPDATE categories SET tytle = $2, description = $3 WHERE id = $1 RETURNING *;

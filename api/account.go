@@ -144,15 +144,22 @@ func (server *Server) getAccounts(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
 
 	arg := db.GetAccountsParams{
-		UserID:      req.UserID,
-		Type:        req.Type,
-		CategoryID:  req.CategoryID,
+		UserID: req.UserID,
+		Type:   req.Type,
+		CategoryID: sql.NullInt32{
+			Int32: req.CategoryID,
+			Valid: req.CategoryID > 0,
+		},
 		Tytle:       req.Tytle,
 		Description: req.Description,
-		Date:        req.Date,
+		Date: sql.NullTime{
+			Time:  req.Date,
+			Valid: !req.Date.IsZero(),
+		},
 	}
 
 	accounts, err := server.store.GetAccounts(ctx, arg)
@@ -174,6 +181,7 @@ func (server *Server) getAccountGraph(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
 
 	arg := db.GetAccountsGraphParams{
@@ -184,7 +192,7 @@ func (server *Server) getAccountGraph(ctx *gin.Context) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return
+
 		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
@@ -203,6 +211,7 @@ func (server *Server) getAccountReports(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+
 	}
 
 	arg := db.GetAccountsReportsParams{

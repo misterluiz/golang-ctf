@@ -120,6 +120,7 @@ func (server *Server) getCategories(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
 	}
 
 	arg := db.GetCategoriesParams{
@@ -132,7 +133,7 @@ func (server *Server) getCategories(ctx *gin.Context) {
 	categories, err := server.store.GetCategories(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
+
 	}
 
 	ctx.JSON(http.StatusOK, categories)

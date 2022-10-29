@@ -16,6 +16,13 @@ type Querier interface {
 	DeleteCategories(ctx context.Context, id int32) error
 	GetAccount(ctx context.Context, id int32) (Account, error)
 	GetAccounts(ctx context.Context, arg GetAccountsParams) ([]GetAccountsRow, error)
+	GetAccountsByUserIdAndType(ctx context.Context, arg GetAccountsByUserIdAndTypeParams) ([]GetAccountsByUserIdAndTypeRow, error)
+	GetAccountsByUserIdAndTypeAndCategoryId(ctx context.Context, arg GetAccountsByUserIdAndTypeAndCategoryIdParams) ([]GetAccountsByUserIdAndTypeAndCategoryIdRow, error)
+	GetAccountsByUserIdAndTypeAndCategoryIdAndTytle(ctx context.Context, arg GetAccountsByUserIdAndTypeAndCategoryIdAndTytleParams) ([]GetAccountsByUserIdAndTypeAndCategoryIdAndTytleRow, error)
+	GetAccountsByUserIdAndTypeAndCategoryIdAndTytleAndDescription(ctx context.Context, arg GetAccountsByUserIdAndTypeAndCategoryIdAndTytleAndDescriptionParams) ([]GetAccountsByUserIdAndTypeAndCategoryIdAndTytleAndDescriptionRow, error)
+	GetAccountsByUserIdAndTypeAndDate(ctx context.Context, arg GetAccountsByUserIdAndTypeAndDateParams) ([]GetAccountsByUserIdAndTypeAndDateRow, error)
+	GetAccountsByUserIdAndTypeAndDescription(ctx context.Context, arg GetAccountsByUserIdAndTypeAndDescriptionParams) ([]GetAccountsByUserIdAndTypeAndDescriptionRow, error)
+	GetAccountsByUserIdAndTypeAndTytle(ctx context.Context, arg GetAccountsByUserIdAndTypeAndTytleParams) ([]GetAccountsByUserIdAndTypeAndTytleRow, error)
 	GetAccountsGraph(ctx context.Context, arg GetAccountsGraphParams) (int64, error)
 	GetAccountsReports(ctx context.Context, arg GetAccountsReportsParams) (int64, error)
 	GetCategories(ctx context.Context, arg GetCategoriesParams) ([]Category, error)
