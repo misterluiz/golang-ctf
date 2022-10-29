@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/misterluiz/golang-ctf/db/sqlc"
+	"github.com/misterluiz/golang-ctf/util"
 )
 
 type createAccountRequest struct {
@@ -20,6 +21,12 @@ type createAccountRequest struct {
 }
 
 func (server *Server) createAccount(ctx *gin.Context) {
+
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req createAccountRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -63,6 +70,12 @@ type getAccountRequest struct {
 }
 
 func (server *Server) getAccount(ctx *gin.Context) {
+
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getAccountRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -87,6 +100,11 @@ type deleteAccountRequest struct {
 }
 
 func (server *Server) deleteAccount(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req deleteAccountRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -110,6 +128,12 @@ type updateAccountRequest struct {
 }
 
 func (server *Server) updateAccount(ctx *gin.Context) {
+
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req updateAccountRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -140,6 +164,11 @@ type getAccountsRequest struct {
 }
 
 func (server *Server) getAccounts(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getAccountsRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -177,6 +206,11 @@ type getAccountGraphRequest struct {
 }
 
 func (server *Server) getAccountGraph(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getAccountGraphRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -207,6 +241,11 @@ type getAccountReports struct {
 }
 
 func (server *Server) getAccountReports(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getAccountGraphRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {

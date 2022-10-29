@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/misterluiz/golang-ctf/db/sqlc"
+	"github.com/misterluiz/golang-ctf/util"
 )
 
 type createCategoryRequest struct {
@@ -16,6 +17,11 @@ type createCategoryRequest struct {
 }
 
 func (server *Server) createCategory(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req createCategoryRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -42,6 +48,11 @@ type getCategoryRequest struct {
 }
 
 func (server *Server) getCategory(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getCategoryRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -66,6 +77,11 @@ type deleteCategoryRequest struct {
 }
 
 func (server *Server) deleteCategory(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req deleteCategoryRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -88,6 +104,12 @@ type updateCategoryRequest struct {
 }
 
 func (server *Server) updateCategory(ctx *gin.Context) {
+
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req updateCategoryRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
@@ -116,6 +138,12 @@ type getCategoriesRequest struct {
 }
 
 func (server *Server) getCategories(ctx *gin.Context) {
+
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getCategoriesRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
