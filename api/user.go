@@ -5,6 +5,7 @@ import (
 	"crypto/sha512"
 	"database/sql"
 	"net/http"
+	"regexp"
 
 	"github.com/gin-gonic/gin"
 	db "github.com/misterluiz/golang-ctf/db/sqlc"
@@ -13,7 +14,7 @@ import (
 
 type CreateUserRequest struct {
 	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,min=8,max=64"`
 	Email    string `json:"email" binding:"required"`
 }
 
@@ -22,6 +23,13 @@ func (server *Server) createUser(ctx *gin.Context) {
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	is_alphanumeric := regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString(req.Password)
+	if is_alphanumeric != false {
+		ctx.JSON(http.StatusBadRequest, "Senha não atende nossa politica")
+		return
 	}
 
 	hashedInput := sha512.Sum512_256([]byte(req.Password))
@@ -31,6 +39,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 	passwordHashInBytes, err := bcrypt.GenerateFromPassword([]byte(preparedPassword), bcrypt.DefaultCost)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
 	}
 
 	var passwordHashed = string(passwordHashInBytes)
@@ -43,6 +52,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
 	}
 	ctx.JSON(http.StatusOK, user)
 
