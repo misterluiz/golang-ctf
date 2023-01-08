@@ -1,7 +1,11 @@
 package util
 
 import (
+	"encoding/base64"
+	"fmt"
 	"net/http"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -9,6 +13,7 @@ import (
 )
 
 type Claims struct {
+	Id       int32  `json:"user_id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
@@ -47,4 +52,27 @@ func GetTokenInHeaderAndVerify(ctx *gin.Context) error {
 		return errValidateToken
 	}
 	return nil
+}
+
+func ValidarId(ctx *gin.Context, id int32) error {
+
+	tokenHeader := ctx.GetHeader("authorization")
+	fields := strings.Fields(tokenHeader)
+	tokenValidate := fields[1]
+	id_user := id
+	textEncoded := strings.SplitAfter(tokenHeader[7:], ".")
+	rawDecodedText, _ := base64.StdEncoding.DecodeString(textEncoded[1])
+	texto2 := string(rawDecodedText)
+	texto := "userid" + strconv.Itoa(int(id_user))
+	final := regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(texto2, "")
+	match, _ := regexp.MatchString(texto, final)
+	errValidateId := ValidateToken(tokenValidate, ctx)
+	fmt.Println(final)
+	fmt.Println(texto)
+	fmt.Println(match)
+	if match != true {
+		return fmt.Errorf("Não é possivel visualiuzar esses dados ")
+	}
+
+	return errValidateId
 }
