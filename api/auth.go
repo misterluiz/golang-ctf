@@ -17,6 +17,7 @@ type loginRequest struct {
 	Password string `json:"password" binding:"required"`
 }
 type Claims struct {
+	Id       int32  `json:"user_id"`
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
@@ -50,14 +51,15 @@ func (server *Server) login(ctx *gin.Context) {
 		return
 	}
 
-	claims := &Claims{
+	Claims := &Claims{
 		Username: req.Username,
+		Id:       user.ID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(320 * time.Minute)),
 		},
 	}
 
-	generatedToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	generatedToken := jwt.NewWithClaims(jwt.SigningMethodHS256, Claims)
 	var jwtSigned = []byte("secret_key")
 	tokenString, err := generatedToken.SignedString(jwtSigned)
 
