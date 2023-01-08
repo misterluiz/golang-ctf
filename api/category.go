@@ -60,6 +60,13 @@ func (server *Server) getCategory(ctx *gin.Context) {
 	}
 
 	category, err := server.store.GetCategory(ctx, req.ID)
+
+	errValidateId := util.ValidarId(ctx, category.UserID)
+	if errValidateId != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errValidateId))
+		return
+	}
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))

@@ -62,16 +62,14 @@ func ValidarId(ctx *gin.Context, id int32) error {
 	id_user := id
 	textEncoded := strings.SplitAfter(tokenHeader[7:], ".")
 	rawDecodedText, _ := base64.StdEncoding.DecodeString(textEncoded[1])
-	texto2 := string(rawDecodedText)
-	texto := "userid" + strconv.Itoa(int(id_user))
-	final := regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(texto2, "")
-	match, _ := regexp.MatchString(texto, final)
+	rawDecodedTextConv := string(rawDecodedText)
+	userIdConv := "userid" + strconv.Itoa(int(id_user))
+	final := regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(rawDecodedTextConv, "")
+	match, _ := regexp.MatchString(userIdConv, final)
 	errValidateId := ValidateToken(tokenValidate, ctx)
-	fmt.Println(final)
-	fmt.Println(texto)
-	fmt.Println(match)
+
 	if match != true {
-		return fmt.Errorf("Não é possivel visualiuzar esses dados ")
+		return fmt.Errorf("Voce não está autorizado a visualiuzar esses dados ")
 	}
 
 	return errValidateId
