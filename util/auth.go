@@ -74,3 +74,23 @@ func ValidarId(ctx *gin.Context, id int32) error {
 
 	return errValidateId
 }
+
+func ValidarUserName(ctx *gin.Context, name string) error {
+
+	tokenHeader := ctx.GetHeader("authorization")
+	fields := strings.Fields(tokenHeader)
+	tokenValidate := fields[1]
+	username := name
+	textEncoded := strings.SplitAfter(tokenHeader[7:], ".")
+	rawDecodedText, _ := base64.StdEncoding.DecodeString(textEncoded[1])
+	rawDecodedTextConv := string(rawDecodedText)
+	final := regexp.MustCompile(`[^a-zA-Z0-9 ]+`).ReplaceAllString(rawDecodedTextConv, "")
+	match, _ := regexp.MatchString(username, final)
+	errValidateUserName := ValidateToken(tokenValidate, ctx)
+
+	if match != true {
+		return fmt.Errorf("Voce não está autorizado a visualiuzar esses dados ")
+	}
+
+	return errValidateUserName
+}

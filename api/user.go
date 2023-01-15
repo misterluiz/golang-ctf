@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	db "github.com/misterluiz/golang-ctf/db/sqlc"
+	"github.com/misterluiz/golang-ctf/util"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -63,6 +64,11 @@ type getUserRequest struct {
 }
 
 func (server *Server) getUser(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getUserRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -70,6 +76,12 @@ func (server *Server) getUser(ctx *gin.Context) {
 	}
 
 	user, err := server.store.GetUser(ctx, req.Username)
+	errValidateUserName := util.ValidarUserName(ctx, user.Username)
+	if errValidateUserName != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errValidateUserName))
+		return
+	}
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -87,6 +99,11 @@ type getUserByIdRequest struct {
 }
 
 func (server *Server) getUserById(ctx *gin.Context) {
+	errValidateToken := util.GetTokenInHeaderAndVerify(ctx)
+	if errValidateToken != nil {
+		return
+	}
+
 	var req getUserByIdRequest
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
@@ -94,6 +111,11 @@ func (server *Server) getUserById(ctx *gin.Context) {
 	}
 
 	user, err := server.store.GetUserById(ctx, req.ID)
+	errValidateId := util.ValidarId(ctx, user.ID)
+	if errValidateId != nil {
+		ctx.JSON(http.StatusUnauthorized, errorResponse(errValidateId))
+		return
+	}
 
 	if err != nil {
 		if err == sql.ErrNoRows {
